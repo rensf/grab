@@ -38,20 +38,52 @@ public class App {
 
                 Elements trs2 = doc2.select(".roundy.a-r.at-c").select("tbody").select("tr");
 
-                System.out.println("*******************************");
-                System.out.println(trs2);
+                System.out.println("***************种群****************");
+                System.out.println(trs2.select("td").eq(84).select("td[width='50%']").eq(0).text());
+                System.out.println("***************孵化周期****************");
+                System.out.println(trs2.select("td").eq(84).select("td[width='50%']").eq(1).text());
 
                 map.put("attr_icon", trs2.select(".roundy.fulltable").select("img").attr("data-url"));
                 map.put("img_path", trs2.select(".roundy.bgwhite.fulltable").select("img").attr("data-url"));
-                map.put("property", trs2.select(".roundy.bw-1").select("span").select("a").text());
+                map.put("property", trs2.select("td").eq(7).text());
+                map.put("type", trs2.select("td").eq(10).text());
+                map.put("feature", trs2.select("td").eq(13).text());
+                if (trs2.select("td").eq(14).text().contains("隱藏特性")) {
+                    map.put("feature_h", trs2.select("td").eq(14).text());
+                    map.put("ex_max", trs2.select("td").eq(15).text());
+                } else {
+                    map.put("feature_h", "无");
+                    map.put("ex_max", trs2.select("td").eq(14).text());
+                }
+                map.put("height", trs2.select("td").eq(59).text());
+                map.put("weight", trs2.select("td").eq(62).text());
+                if (trs2.select("td").eq(65).select("img").attr("alt").equals("FUnknown.png") || trs2.select("td").eq(65).select("img").attr("alt").equals("形.png")) {
+                    map.put("figure", "未知");
+                } else {
+                    map.put("figure", trs2.select("td").eq(65).select("img").attr("alt"));
+                }
+
+                map.put("figure_icon", trs2.select("td").eq(65).select("img").attr("data-url"));
+                if(trs2.select("td").eq(68).text().equals("脚印")) {
+                    map.put("footprint", trs2.select("td").eq(68).select("img").attr("data-url"));
+                }
+                map.put("capturerate", trs2.select("td").eq(74).text());
+                map.put("sexratio",trs2.select("td").eq(77).select("[class='']").text());
+                map.put("population", trs2.select("td").eq(84).select("td[width='50%']").eq(0).text());
+                map.put("hatch", trs2.select("td").eq(84).select("td[width='50%']").eq(1).text());
 
                 list.add(map);
-                break;
+//                break;
+
             }
         }
 
-        ExcelExport.exportListMap(list, "编码,中文名,日文名,英文名,属性图标,图片,属性", "id,ch_name,ja_name,en_name,attr_icon,img_path," +
-                        "property", "D:\\html\\excel\\pokemon.xls", "宝可梦",
+        ExcelExport.exportListMap(list,
+                "编码,中文名,日文名,英文名,属性图标,图片,属性,分类,特性,隐藏特性,满级经验,身高,体重,体型,体型图标,脚印,捕获率,性别比例,种群,孵化周期",
+                "id,ch_name,ja_name,en_name,attr_icon,img_path,property,type,feature,feature_h,ex_max,height,weight," +
+                        "figure,figure_icon,footprint,capturerate,sexratio,population,hatch",
+                "D:\\html\\excel\\pokemon.xls",
+                "宝可梦",
                 null);
     }
 
